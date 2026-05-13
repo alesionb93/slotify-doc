@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slotify • Documentação Oficial do Produto v1.0</title>
+  <style>
+    :root {
+      --primary: #652AF4;
+      --primary-hover: #5224d6;
+      --primary-light: rgba(101, 42, 244, 0.12);
+      --sidebar-bg-dark: #1B1340;
+      --bg-dark: #0a0910;
+      --bg-card-dark: #12101a;
+      --bg-hover-dark: #1a1825;
+      --text-primary-dark: #eae6ff;
+      --text-secondary-dark: #a39ec2;
+      --text-muted-dark: #6b6590;
+      --border-dark: #2d2942;
+      
+      --bg-light: #ffffff;
+      --bg-card-light: #f8f6fc;
+      --bg-hover-light: #f0ecf8;
+      --text-primary-light: #1a1630;
+      --text-secondary-light: #5a5475;
+      --text-muted-light: #8a83a8;
+      --border-light: #e5e0f0;
+
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #06b6d4;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --sidebar-width: 280px;
+      --header-height: 64px;
+      --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: var(--bg-dark);
+      --bg-secondary: var(--sidebar-bg-dark);
+      --bg-card: var(--bg-card-dark);
+      --bg-hover: var(--bg-hover-dark);
+      --text-primary: var(--text-primary-dark);
+      --text-secondary: var(--text-secondary-dark);
+      --text-muted: var(--text-muted-dark);
+      --border: var(--border-dark);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: var(--bg-light);
+      --bg-secondary: #f4f0ff;
+      --bg-card: var(--bg-card-light);
+      --bg-hover: var(--bg-hover-light);
+      --text-primary: var(--text-primary-light);
+      --text-secondary: var(--text-secondary-light);
+      --text-muted: var(--text-muted-light);
+      --border: var(--border-light);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .doc-header {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--header-height);
+      background: rgba(27, 19, 64, 0.7); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); z-index: 100; display: flex;
+      align-items: center; justify-content: space-between; padding: 0 24px;
+    }
+    [data-theme="light"] .doc-header { background: rgba(255,255,255,0.85); }
+
+    .header-brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; }
+    .header-brand .logo-icon { width: 20px; height: 20px; color: var(--primary); }
+    .version-tag { font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 600; margin-left: 4px; }
+
+    .header-controls { display: flex; align-items: center; gap: 10px; }
+    .btn-icon {
+      background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+      width: 36px; height: 36px; border-radius: var(--radius-md); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: var(--transition);
+    }
+    .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .mobile-menu-btn { display: none; }
+
+    .auth-overlay {
+      position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center;
+      padding: 24px; background: rgba(10, 9, 16, 0.96); backdrop-filter: blur(14px);
+    }
+
+    .auth-card {
+      width: min(440px, 100%); background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 34px 30px;
+      color: var(--text-primary);
+    }
+
+    .auth-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .auth-brand .logo-icon { width: 28px; height: 28px; color: var(--primary); }
+    .auth-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .auth-subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 26px; }
+
+    .auth-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+    .auth-field label { font-size: 13px; color: var(--text-secondary); }
+    .auth-field input {
+      width: 100%; padding: 12px 14px; border-radius: var(--radius-md);
+      border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary);
+      outline: none; transition: var(--transition);
+    }
+    .auth-field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(101, 42, 244, 0.12); }
+
+    .auth-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; }
+    .auth-button {
+      width: 100%; border: none; cursor: pointer; border-radius: var(--radius-md);
+      background: var(--primary); color: #fff; font-weight: 700; padding: 12px 16px;
+      transition: var(--transition);
+    }
+    .auth-button:hover { background: var(--primary-hover); }
+
+    .auth-error {
+      margin-top: 14px; color: var(--danger); background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.22); border-radius: var(--radius-sm);
+      padding: 12px 14px; font-size: 13px;
+    }
+
+    .logout-btn { display: none; }
+    .logout-btn.visible { display: flex; }
+
+    .auth-helper { color: var(--text-muted); font-size: 13px; margin-top: 8px; }
+
+    .doc-layout { display: grid; grid-template-columns: var(--sidebar-width) 1fr; gap: 0; padding-top: var(--header-height); min-height: 100vh; }
+    .doc-sidebar {
+      position: sticky; top: var(--header-height); height: calc(100vh - var(--header-height));
+      overflow-y: auto; background: var(--bg-secondary); border-right: 1px solid var(--border);
+      padding: 16px; z-index: 50; transition: transform 0.3s ease;
+    }
+    .sidebar-search { position: relative; margin-bottom: 12px; }
+    .sidebar-search input {
+      width: 100%; padding: 8px 10px 8px 32px; border-radius: var(--radius-md);
+      border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary);
+      font-size: 13px; outline: none; transition: var(--transition);
+    }
+    .sidebar-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+    .sidebar-search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 16px; }
+
+    .sidebar-nav ul { list-style: none; padding: 0; }
+    .sidebar-nav li { margin: 2px 0; }
+    .sidebar-nav a {
+      display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: var(--radius-sm);
+      color: var(--text-secondary); text-decoration: none; font-size: 13px; transition: var(--transition);
+      border-left: 2px solid transparent;
+    }
+    .sidebar-nav a:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .sidebar-nav a.active { background: var(--primary-light); color: var(--primary); font-weight: 500; border-left-color: var(--primary); }
+
+    .doc-main { padding: 32px 36px 80px; max-width: 920px; width: 100%; margin: 0 auto; }
+    .breadcrumbs { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
+    .breadcrumbs a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumbs a:hover { color: var(--primary); }
+    .doc-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+    h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+    h2 { font-size: 22px; font-weight: 600; margin: 36px 0 14px; padding-top: 8px; border-top: 1px solid var(--border); }
+    h3 { font-size: 18px; font-weight: 600; margin: 24px 0 10px; }
+    h4 { font-size: 15px; font-weight: 600; margin: 18px 0 8px; color: var(--text-secondary); }
+    p { margin-bottom: 14px; color: var(--text-secondary); font-size: 14.5px; }
+    code { font-family: var(--font-mono); background: var(--bg-hover); padding: 2px 5px; border-radius: var(--radius-sm); font-size: 0.88em; color: var(--primary); }
+    pre { background: var(--bg-card); border: 1px solid var(--border); padding: 16px; border-radius: var(--radius-md); overflow-x: auto; font-size: 12.5px; line-height: 1.5; margin: 14px 0; }
+    pre code { background: transparent; padding: 0; color: var(--text-primary); }
+
+    .section-wrapper { position: relative; padding: 16px; margin-bottom: 20px; border-radius: var(--radius-md); border: 1px solid transparent; transition: var(--transition); }
+    .section-wrapper:hover { background: var(--bg-secondary); border-color: var(--border); }
+    .copy-btn {
+      position: absolute; top: 16px; right: 16px; opacity: 0; transition: var(--transition);
+      background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
+      padding: 6px 10px; border-radius: var(--radius-sm); font-size: 12px; cursor: pointer;
+      display: flex; align-items: center; gap: 4px; z-index: 10;
+    }
+    .section-wrapper:hover .copy-btn { opacity: 1; }
+    .copy-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    .callout { display: flex; gap: 12px; padding: 14px 16px; border-radius: var(--radius-md); margin: 18px 0; border-left: 4px solid transparent; background: var(--bg-secondary); border: 1px solid var(--border); }
+    .callout-icon { font-size: 18px; margin-top: 1px; }
+    .callout-content { font-size: 13.5px; line-height: 1.5; }
+    .callout-title { font-weight: 600; margin-bottom: 4px; display: block; }
+    .callout.info { border-left-color: var(--info); background: rgba(6, 182, 212, 0.06); }
+    .callout.warning { border-left-color: var(--warning); background: rgba(245, 158, 11, 0.06); }
+    .callout.danger { border-left-color: var(--danger); background: rgba(239, 68, 68, 0.06); }
+    .callout.success { border-left-color: var(--success); background: rgba(16, 185, 129, 0.06); }
+
+    .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; vertical-align: middle; }
+    .badge.critical { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge.warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge.legacy { background: rgba(107, 114, 128, 0.15); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.3); }
+    .badge.runtime { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge.failsafe { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .collapsible-header {
+      display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+      padding: 12px 14px; background: var(--bg-secondary); border-radius: var(--radius-md);
+      border: 1px solid var(--border); transition: var(--transition); margin-bottom: 8px;
+    }
+    .collapsible-header:hover { background: var(--bg-hover); }
+    .collapsible-header h3 { margin: 0; font-size: 16px; }
+    .collapsible-arrow { transition: transform 0.2s; color: var(--text-muted); }
+    .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .collapsible-content.open { max-height: 1200px; }
+    .collapsible-inner { padding: 10px 0 6px; }
+
+    .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); margin: 16px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--bg-secondary); font-weight: 600; color: var(--text-primary); position: sticky; top: 0; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-hover); }
+
+    .flow-diagram {
+      background: var(--bg-secondary); border: 1px solid var(--border); padding: 18px;
+      border-radius: var(--radius-lg); font-family: var(--font-mono); font-size: 12px;
+      line-height: 1.7; color: var(--text-secondary); overflow-x: auto; margin: 16px 0;
+      white-space: pre-wrap;
+    }
+    .flow-diagram .hl { color: var(--primary); font-weight: 600; }
+    .flow-diagram .ok { color: var(--success); }
+    .flow-diagram .err { color: var(--danger); }
+    .flow-diagram .warn { color: var(--warning); }
+
+    .api-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 18px; margin: 14px 0; display: flex; align-items: center; gap: 10px; }
+    .api-method { padding: 4px 10px; background: var(--primary); color: #fff; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+    .api-path { font-family: var(--font-mono); color: var(--text-primary); font-size: 14px; font-weight: 500; }
+
+    .doc-footer {
+      border-top: 1px solid var(--border); padding: 28px; text-align: center; font-size: 12px; color: var(--text-muted); background: var(--bg-secondary);
+    }
+
+    @media (max-width: 950px) {
+      .doc-layout { grid-template-columns: 1fr; }
+      .doc-sidebar { position: fixed; left: -100%; width: 260px; top: var(--header-height); z-index: 90; box-shadow: var(--shadow-lg); }
+      .doc-sidebar.open { left: 0; }
+      .mobile-menu-btn { display: flex; }
+      .doc-main { padding: 20px 16px 60px; }
+      .copy-btn { opacity: 1; }
+    }
+
+    @media print {
+      .doc-header, .doc-sidebar, .copy-btn, .btn-icon, .mobile-menu-btn { display: none !important; }
+      .doc-layout { grid-template-columns: 1fr; padding-top: 0; }
+      .doc-main { padding: 0; max-width: 100%; }
+      body { background: #fff; color: #000; }
+      h1, h2, h3, code, pre, th, td { color: #000 !important; background: #fff !important; border-color: #ccc !important; }
+      .callout, .flow-diagram, .api-block, .table-container { border: 1px solid #ccc; color: #000 !important; }
+      .collapsible-content { max-height: none !important; overflow: visible !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="doc-header">
+    <div class="header-brand">
+      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      <span>Slotify <span class="version-tag">v1.0</span></span>
+    </div>
+    <div class="header-controls">
+      <button class="btn-icon" onclick="document.getElementById('sidebar-search-input').focus()" title="Buscar">🔍</button>
+      <button class="btn-icon" onclick="toggleTheme()" title="Alternar tema">🌓</button>
+      <button id="logoutBtn" class="btn-icon logout-btn" onclick="logout()" title="Sair">⎋</button>
+      <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    </div>
+  </header>
+
+  <div class="auth-overlay" id="authOverlay" aria-label="Tela de login interna">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        <div>
+          <div style="font-size:14px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color: var(--primary);">Slotify Docs</div>
+          <div style="font-size:12px; color: var(--text-muted);">Portal Interno</div>
+        </div>
+      </div>
+      <div class="auth-title">Documentação Interna</div>
+      <div class="auth-subtitle">Acesso restrito</div>
+      <form id="authForm">
+        <div class="auth-field">
+          <label for="authUser">Usuário</label>
+          <input id="authUser" name="username" autocomplete="username" type="text" placeholder="Digite seu usuário" required>
+        </div>
+        <div class="auth-field">
+          <label for="authPass">Senha</label>
+          <input id="authPass" name="password" autocomplete="current-password" type="password" placeholder="Digite sua senha" required>
+        </div>
+        <button type="submit" class="auth-button">Entrar</button>
+        <div id="authError" class="auth-error" style="display:none;">Usuário ou senha inválidos</div>
+      </form>
+      <div class="auth-helper">Somente usuários autorizados têm acesso a esta documentação.</div>
+    </div>
+  </div>
+
+  <div class="doc-layout">
+    <aside class="doc-sidebar" id="sidebar">
+      <div class="sidebar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="sidebar-search-input" placeholder="Buscar na documentação..." oninput="filterSidebar(this.value)">
+      </div>
+      <nav class="sidebar-nav" id="toc-nav">
+        <ul>
+          <li><a href="#visao-geral">📐 Visão Geral do Produto</a></li>
+          <li><a href="#objetivo">🎯 Objetivo do Sistema</a></li>
+          <li><a href="#arquitetura">🏗️ Arquitetura Geral</a></li>
+          <li><a href="#estrutura">📁 Estrutura do Projeto</a></li>
+          <li><a href="#modulos">🔗 Mapeamento de Módulos</a></li>
+          <li><a href="#paginas">🖥️ Mapeamento de Páginas/Telas</a></li>
+          <li><a href="#modelo-dados">🗄️ Modelo de Dados</a></li>
+          <li><a href="#permissoes">🛡️ Permissões, Roles e Multi-Tenancy</a></li>
+          <li><a href="#fluxos-auth">🔐 Fluxos de Autenticação</a></li>
+          <li><a href="#jornadas">👤 Jornadas do Usuário</a></li>
+          <li><a href="#fluxos-sistema">⚙️ Fluxos Completos do Sistema</a></li>
+          <li><a href="#regras-negocio">📐 Regras de Negócio</a></li>
+          <li><a href="#edge-functions">🌐 Edge Functions (APIs Backend)</a></li>
+          <li><a href="#integracoes">🔌 Integrações Externas</a></li>
+          <li><a href="#estados-sistema">📊 Estados do Sistema</a></li>
+          <li><a href="#componentes">🧩 Componentes Reutilizáveis</a></li>
+          <li><a href="#hooks">🔗 Hooks, Contextos e Stores Globais</a></li>
+          <li><a href="#dependencias">🕸️ Dependências entre Módulos</a></li>
+          <li><a href="#fluxos-erro">⚠️ Fluxos Alternativos e de Erro</a></li>
+          <li><a href="#validacoes">✅ Validações e Restrições</a></li>
+          <li><a href="#eventos">📡 Eventos do Sistema</a></li>
+          <li><a href="#pwa">📲 PWA e Service Workers</a></li>
+          <li><a href="#theming">🎨 Sistema de Tema (Theming)</a></li>
+          <li><a href="#criticos">🔴 Cenários Críticos e Pontos de Atenção</a></li>
+          <li><a href="#debitos">🛠️ Débitos Técnicos Identificados</a></li>
+          <li><a href="#melhorias">🚀 Oportunidades de Melhoria</a></li>
+          <li><a href="#ambiguidades">❓ Ambiguidades e Hipóteses</a></li>
+          <li><a href="#glossario">📖 Glossário Técnico</a></li>
+          <li><a href="#estrutura-org">🏢 Estrutura Organizacional do Produto</a></li>
+          <li><a href="#anexos">📎 Anexos</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="doc-main">
+      <nav class="breadcrumbs"><a href="#">Home</a> <span>/</span> <a href="#">Documentação</a> <span>/</span> <span>Slotify v1.0</span></nav>
+      <div class="doc-meta">Documento técnico-funcional consolidado • Versão do core analisado: <code>script.js v15-config-colaborador-meu-perfil-2026-05-13</code></div>
+      
+      <div class="section-wrapper" id="visao-geral">
+        <button class="copy-btn" onclick="copySection('visao-geral')">📋 Copiar seção</button>
+        <h1>Slotify — Documentação Oficial do Produto</h1>
+        <p><span class="badge legacy">LEGADO</span> <strong>Nome interno antigo:</strong> Beauty System</p>
+        <p>Slotify é um SaaS multi-tenant de agendamento e gestão operacional para salões de beleza, barbearias e estabelecimentos correlatos. Combina três experiências em uma plataforma única:</p>
+        <div class="table-container">
+          <table><thead><tr><th>Experiência</th><th>Persona</th><th>Canal</th></tr></thead><tbody>
+            <tr><td>Painel Operacional</td><td>Equipe interna (admin, colaborador, master_admin)</td><td>Web app PWA (<code>/agenda.html</code>)</td></tr>
+            <tr><td>Booking Público</td><td>Cliente final do salão</td><td>URL pública por tenant (<code>/agendar/{tenantId}</code>)</td></tr>
+            <tr><td>Booking via WhatsApp</td><td>Cliente final iniciado em conversa</td><td>Magic link (<code>/agendamento-whatsapp.html?t=&lt;token&gt;</code>)</td></tr>
+          </tbody></table>
+        </div>
+        <h3>1.1. Características marcantes do produto</h3>
+        <ul>
+          <li><strong>Multi-tenant nativo:</strong> cada tenant possui catálogo, profissionais, clientes, tema visual, regras operacionais e usuários próprios.</li>
+          <li><strong>Multi-canal de booking:</strong> o mesmo motor (<code>agendamento-cliente.js</code>) atende booking direto e booking via magic-link de WhatsApp.</li>
+          <li><strong>Tema dinâmico por tenant:</strong> paleta gerada a partir de uma cor primária, com sincronização cross-tab via <code>BroadcastChannel</code> e fallback em <code>localStorage</code>.</li>
+          <li><strong>PWA instalável</strong> com service worker custom (não usa <code>vite-plugin-pwa</code>).</li>
+          <li><strong>Sistema de pacotes (venda + uso)</strong> integrado ao agendamento, com badges visuais e patches runtime para fluxos legados.</li>
+          <li><strong>Automação de WhatsApp (Evolution API)</strong> para confirmação imediata, lembretes inteligentes (24h / 2h) e reativação de clientes inativos.</li>
+          <li><strong>Push notifications Web (VAPID)</strong> para agendamentos vindos do canal externo.</li>
+          <li><strong>Analytics modulares plugáveis</strong> (cancelamentos, vendas de produtos).</li>
+          <li><strong>Stack vanilla JS sobre Supabase JS SDK v2</strong> — sem framework SPA (React/Vue/Svelte).</li>
+        </ul>
+      </div>
+
+      <div class="section-wrapper" id="objetivo">
+        <button class="copy-btn" onclick="copySection('objetivo')">📋 Copiar seção</button>
+        <h2>2. Objetivo do Sistema</h2>
+        <p>Centralizar e profissionalizar a operação completa de um salão, cobrindo:</p>
+        <ul>
+          <li>Captação de clientes via canais públicos (link direto, WhatsApp).</li>
+          <li>Agendamento controlado, multi-profissional, multi-serviço, com bloqueios.</li>
+          <li>Atendimento com timeline visual, status (<code>pendente</code>/<code>confirmado</code>/<code>concluído</code>/<code>cancelado</code>/<code>cancelado_com_venda</code>) e venda de produtos no fluxo.</li>
+          <li>Pagamentos multi-forma (PIX, dinheiro, débito, crédito, crédito parcelado) com detecção de auto-conclusão.</li>
+          <li>Gestão de pessoas: profissionais, comissões, cores por profissional, vinculação serviço↔profissional.</li>
+          <li>Gestão de catálogo: serviços (com cor/pigmento), produtos (com custo/CMV), pacotes (venda e consumo).</li>
+          <li>CRM leve: clientes com histórico, importação CSV/XLSX (até 5.000 linhas), reativação automática.</li>
+          <li>Comunicação: WhatsApp transacional (confirmação, lembretes, reativação), push notifications.</li>
+          <li>Governança: roles (<code>master_admin</code>, <code>admin</code>, <code>colaborador</code>), feature flags por tenant, limite de usuários por tenant (3), logs de cancelamento auditáveis.</li>
+          <li>Analytics: KPIs de cancelamento, vendas de produtos, lucro/margem, ranking.</li>
+        </ul>
+      </div>
+
+      <div class="section-wrapper" id="arquitetura">
+        <button class="copy-btn" onclick="copySection('arquitetura')">📋 Copiar seção</button>
+        <h2>3. Arquitetura Geral</h2>
+        <div class="flow-diagram">
+<span class="hl">┌─────────────────────────────────────────────────────────────────┐</span>
+<span class="hl">│                       NAVEGADOR (PWA)                           │</span>
+<span class="hl">│                                                                  │</span>
+<span class="hl">│  ┌───────────────┐  ┌────────────────┐  ┌─────────────────┐     │</span>
+<span class="hl">│  │ index.html    │  │ select-tenant  │  │ agenda.html     │     │</span>
+<span class="hl">│  │ (login)       │   │ .html          │  │ (painel)        │     │</span>
+<span class="hl">│  └───────┬───────┘  └────────┬───────┘  └────────┬────────┘     │</span>
+<span class="hl">│          │                   │                   │               │</span>
+<span class="hl">│  ┌───────┴───────────────────┴───────────────────┴────────┐     │</span>
+<span class="hl">│  │ Núcleo: script.js (12.7k linhas) + add-ons plugáveis    │    │</span>
+<span class="hl">│  │  - pagamentos.js, tabela-precos.js,  import-clientes.js  │    │</span>
+<span class="hl">│  │  - analytics-cancelamentos.js, analytics-produtos.js    │    │</span>
+<span class="hl">│  │  - tema-agenda-script.js, skeleton-loading.js, pwa.js   │    │</span>
+<span class="hl">│  │  - notifyWhatsapp.js, cancelamento-auth.js              │    │</span>
+<span class="hl">│  └────────────────┬─────────────────────────────────────────┘   │</span>
+<span class="hl">│                   │                                              │</span>
+<span class="hl">│  ┌────────────────┴───────────────┐  ┌───────────────────────┐  │</span>
+<span class="hl">│  │ Booking público:               │  │ Service Worker        │  │</span>
+<span class="hl">│  │ agendamento-cliente.html        │  │ (sw.js v1.0.0)        │  │</span>
+<span class="hl">│  │ agendamento-whatsapp.html      │  │ + service-worker.js   │  │</span>
+<span class="hl">│  └────────────────┬───────────────┘  │ legado (v3-bcast)     │  │</span>
+<span class="hl">│                    │                  └───────────────────────┘  │</span>
+<span class="hl">└───────────────────┼─────────────────────────────────────────────┘</span>
+                    │ Supabase JS SDK v2 (REST + Realtim e + Auth)
+                    │
+<span class="hl">┌───────────────────┴─────────────────────────────────────────────┐</span>
+<span class="hl">│                        SUPABASE                                 │</span>
+<span class="hl">│                                                                  │</span>
+<span class="hl">│  ┌─────────────────┐  ┌──────────────────┐  ┌────────────────┐  │</span>
+<span class="hl">│  │ PostgreSQL      │  │ Auth             │  │ Edge Fun ctions │  │</span>
+<span class="hl">│  │ - 20+ tabelas   │  │ - email/senha    │  │ - 10 functions │  │</span>
+<span class="hl">│  │ - RLS por tenant│  │ - magic links    │  │ (Deno)         │  │</span>
+<span class="hl">│  │ - RPCs públicas │  │ - invi te e-mail  │  └────────┬───────┘  │</span>
+<span class="hl">│  └─────────────────┘  └──────────────────┘           │          │</span>
+<span class="hl">│                                                      │          │</span>
+<span class="hl">│  ┌──── ──────────┐  pg_cron a cada 5 min              │          │</span>
+<span class="hl">│  │ pg_cron      │──────────────────────────────────▶│           │</span>
+<span class="hl">│  │              │  pg_cron 1x/dia (10:00 BRT)         │          │</span>
+<span class="hl">│  └──────────────┘                                    │          │</span>
+<span class="hl">└──────────────────────────────────────────────────────┼──────────┘</span>
+                                                       │
+                            ┌─────────────────────────┼──────────┐
+                            │                         │          │
+                             ▼                         ▼          ▼
+                  ┌────────────────┐      ┌─────────────────┐  ┌───────────┐
+                  │ Evolution API  │      │ Web Push ( VAPID)│  │ Browser   │
+                  │ (WhatsApp)     │      │                 │  │ Push API  │
+                  └────────────────┘      └─────────────────┘  └───────────┘
+        </div>
+        <h3>3.2. Camadas</h3>
+        <div class="table-container">
+          <table><thead><tr><th>Camada</th><th>Responsabilidade</th><th>Tecnologia</th></tr></thead><tbody>
+            <tr><td>Apresentação</td><td>UI, interações, estado local</td><td>HTML5 + CSS3 (<code>estilos.css</code> 6.2k linhas) + JS vanilla (ES5 conservador)</td></tr>
+            <tr><td>Orquestração cliente</td><td>Roteamento por <code>data-page</code>, modais, estado global em <code>window.*</code></td><td><code>script.js</code> v15</td></tr>
+            <tr><td>Add-ons plugáveis</td><td>Funcionalidades opt-in que se "encaixam" no núcleo via hooks</td><td>Padrão IIFE com flag <code>__SLOTIFY_*_LOADED__</code></td></tr>
+            <tr><td>SDK</td><td>Comunicação com Supabase</td><td><code>@supabase/supabase-js@2</code> via CDN</td></tr>
+            <tr><td>Auth</td><td>Sessão (JWT), login/logout, recovery</td><td>Supabase Auth + edge function <code>resolve-login-to-email</code></td></tr>
+            <tr><td>Persistência</td><td>Banco, RLS, RPCs</td><td>PostgreSQL (Supabase)</td></tr>
+            <tr><td>Lógica server-side</td><td>Operações privilegiadas, automações</td><td>Edge Functions Deno</td></tr>
+            <tr><td>Mensageria</td><td>WhatsApp transacional</td><td>Evolution API (auto-hospedada)</td></tr>
+            <tr><td>Notificações</td><td>Push em background</td><td>Web Push API + VAPID</td></tr>
+            <tr><td>Cache offline</td><td>PWA shell</td><td>Service Worker custom</td></tr>
+          </tbody></table>
+        </div>
+        <div class="callout info"><span class="callout-icon">💡</span><div class="callout-content"><span class="callout-title">Padrão Arquitetural Cliente</span>Não-SPA: cada <code>.html</code> é página independente. Estado global em <code>window.*</code>. Hooks de extensão sobrescrevem funções globais. Flags de carregamento único evitam duplo bootstrap.</div></div>
+      </div>
+
+      <div class="section-wrapper" id="estrutura">
+        <button class="copy-btn" onclick="copySection('estrutura')">📋 Copiar seção</button>
+        <h2>4. Estrutura do Projeto</h2>
+        <h3>4.1. Layout de arquivos (raiz <code>beauty-system</code>)</h3>
+        <pre><code>/
+├── index.html                       # Tela de login
+├── select-tenant.html               # Seleção de tenant (multi-tenant users)
+├── agenda.html                      # Painel principal (shell + 8 áreas + 40+ modais)
+├── agendamento-cliente.html         # Booking público
+├── agendamento-cliente.css
+├── agendamento-cliente.js           # Motor de booking (compartilhado)
+├── agendamento-whatsapp.html        # Booking via magic link
+├── agendamento-whatsapp.js          # Validação de token + reuso do motor
+├── pacotes.html                     # Página standalone de pacotes (vínculo profissional)
+├── tema-agenda.html                 # Editor de tema (dark UI, isolado)
+├── tema-agenda-script.js            # Lógica do editor (HSL, contraste, paleta)
+├── definir-senha.html               # Fluxo de convite/recovery
+├── script.js                        # Núcleo do painel (v15)
+├── script_com_pacotes.js            # 🔴 LEGADO — versão paralela
+├── config.js                        # Bootstrap de SUPABASE_URL/ANON_KEY
+├── supabaseClient.js                # Inicializa window.supabaseClient
+├── pwa.js                           # Update flow do service worker
+├── sw.js                            # Service Worker atual (v1.0.0, simples)
+├── service-worker.js                # 🔴 LEGADO — SW v3-bcast com pre-cache
+├── manifest.json                    # PWA manifest
+├── pagamentos.css / pagamentos.js                  # Add-on: 5 formas de pagamento
+├── tabela-precos.css / tabela-precos.js            # Add-on: catálogo + drag &drop
+├── import-clientes.css / import-clientes.js        # Add-on: CSV/XLSX (≤5.000 linhas)
+├── cancelamento-auth.css / cancelamento-auth.js    # Modal admin de cancelamento
+├── analytics-cancelamentos.css / .js               # Widgets de cancelamento
+├── analytics-produtos.css / .js                    # Widgets de vendas/CMV/lucro
+├── dashboard-pagamentos.css / .js                  # Widgets de pagamentos no dash
+├── notifyWhatsapp.js                # Wrapper para invocar edge function
+├── pacote-badge-patch.js            # 🟡 PATCH RUNTIME — badges de pacote
+├── skeleton-loading.css / .js       # Skeleton overlay theme-aware (v7)
+├── tema-agenda-script.js            # Editor de tema
+├── estilos.css                      # 🎨 Design system completo (6.2k linhas, ~50 seções)
+├── estilos_com_pacotes.css          # 🔴 LEGADO — versão paralela 2.1k linhas
+├── beautySystemLogo.png             # Logo (referenciada no login)
+├── modelo-importacao-clientes.csv   # Template oficial para usuário final
+├── icons/                           # PWA Icons (192, 512)
+├── package.json                     # devDep única: @playwright/test ^1.59.1
+├── playwright.config.js             # E2E em Chrome real (headless: false)
+└── supabase/functions/              # Edge Functions (Deno) - 10 arquivos</code></pre>
+        <h3>4.2. Stack runtime</h3>
+        <div class="table-container">
+          <table><thead><tr><th>Camada</th><th>Tecnologia</th><th>Versão</th></tr></thead><tbody>
+            <tr><td>Linguagem cliente</td><td>JavaScript ES5 conservador (var, function declarations, IIFE)</td><td>—</td></tr>
+            <tr><td>SDK</td><td><code>@supabase/supabase-js</code></td><td>v2 (CDN jsdelivr)</td></tr>
+            <tr><td>UI helpers</td><td>Font Awesome</td><td>6.5.0 (CDN)</td></tr>
+            <tr><td>Color picker</td><td>Pickr (<code>@simonwep/pickr</code>)</td><td>classic theme (CDN)</td></tr>
+            <tr><td>Drag & Drop</td><td>SortableJS</td><td>1.15.2 (CDN, sob demanda)</td></tr>
+            <tr><td>XLSX</td><td><code>xlsx</code> (SheetJS)</td><td>0.18.5 (CDN, sob demanda)</td></tr>
+            <tr><td>Push</td><td><code>web-push</code></td><td>3.6.7 (esm.sh)</td></tr>
+            <tr><td>Backend functions</td><td>Deno + Supabase JS v2</td><td><code>std@0.224.0</code> / <code>@0.168.0</code></td></tr>
+            <tr><td>Testes</td><td>Playwright</td><td>^1.59.1 (Chrome real, não headless)</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="modulos">
+        <button class="copy-btn" onclick="copySection('modulos')">📋 Copiar seção</button>
+        <h2>5. Mapeamento de Módulos</h2>
+        <p>O painel (<code>agenda.html</code>) organiza-se em 8 áreas principais acessíveis via sidebar com atributo <code>data-page</code>. Add-ons opcionais inserem módulos adicionais dinamicamente.</p>
+        <h3>5.1. Módulos do núcleo (sidebar fixa)</h3>
+        <div class="table-container">
+          <table><thead><tr><th>#</th><th>Módulo</th><th>data-page</th><th>Responsabilidade</th><th>Roles com acesso</th></tr></thead><tbody>
+            <tr><td>1</td><td>Agendamentos</td><td><code>agendamentos</code></td><td>Calendário mensal + lista do dia (timeline) + CRUD</td><td>admin, colaborador (filtrado), master_admin</td></tr>
+            <tr><td>2</td><td>Clientes</td><td><code>clientes</code></td><td>CRUD + busca + import CSV/XLSX + histórico</td><td>admin, master_admin</td></tr>
+            <tr><td>3</td><td>Profissionais</td><td><code>profissionais</code></td><td>CRUD + avatar (upload + crop) + cores + vínculo</td><td>admin, master_admin</td></tr>
+            <tr><td>4</td><td>Serviços</td><td><code>servicos</code></td><td>CRUD + cor + pigmento + duração + preço</td><td>admin, master_admin</td></tr>
+            <tr><td>5</td><td>Produtos</td><td><code>produtos</code></td><td>CRUD + estoque + custo (CMV) + venda no agendamento</td><td>admin, master_admin</td></tr>
+            <tr><td>6</td><td>Pacotes</td><td><code>pacotes</code></td><td>Catálogo de pacotes + consumo + vínculo profissional</td><td>admin, master_admin</td></tr>
+            <tr><td>7</td><td>Dashboard</td><td><code>dashboard</code></td><td>KPIs gerais + add-on widgets</td><td>admin, master_admin</td></tr>
+            <tr><td>8</td><td>Histórico</td><td><code>historico</code></td><td>Abas (agendamentos, cancelamentos, pagamentos) com filtros</td><td>admin, master_admin</td></tr>
+          </tbody></table>
+        </div>
+        <h3>5.2. Módulos secundários (modal-driven) & 5.3. Add-ons plugáveis</h3>
+        <div class="callout info"><span class="callout-icon">📦</span><div class="callout-content"><span class="callout-title">Módulos & Add-ons</span>Inclui Usuários, Meu Perfil, Configurações do Tenant, Editor de Tema, Comissões, Bloqueios de agenda, Recomendações, Tabela de Preços, Pagamentos, Importação, Analytics, Skeleton Loading e Patch de Badges. Todos carregados sob demanda ou via hook.</div></div>
+      </div>
+
+      <div class="section-wrapper" id="paginas">
+        <button class="copy-btn" onclick="copySection('paginas')">📋 Copiar seção</button>
+        <h2>6. Mapeamento de Páginas/Telas</h2>
+        <div class="table-container">
+          <table><thead><tr><th>Arquivo</th><th>Rota lógica</th><th>Pública/Privada</th><th>Persona</th><th>Função</th></tr></thead><tbody>
+            <tr><td><code>index.html</code></td><td><code>/</code></td><td>Pública</td><td>Equipe</td><td>Login (login OU email + senha)</td></tr>
+            <tr><td><code>definir-senha.html</code></td><td><code>/definir-senha.html</code></td><td>Pública (token)</td><td>Equipe</td><td>Define/redefine senha com 4 formatos de token</td></tr>
+            <tr><td><code>select-tenant.html</code></td><td><code>/select-tenant.html</code></td><td>Privada</td><td>Equipe >1 tenant</td><td>Lista tenants e seta <code>currentTenantId</code></td></tr>
+            <tr><td><code>agenda.html</code></td><td><code>/agenda.html</code></td><td>Privada</td><td>Equipe (com tenant)</td><td>Painel — shell com 8 áreas + 40+ modais</td></tr>
+            <tr><td><code>pacotes.html</code></td><td><code>/pacotes.html</code></td><td>Privada</td><td>admin/master</td><td>Página standalone de pacotes</td></tr>
+            <tr><td><code>tema-agenda.html</code></td><td><code>/tema-agenda.html</code></td><td>Privada</td><td>admin</td><td>Editor de tema (UI dark isolada)</td></tr>
+            <tr><td><code>agendamento-cliente.html</code></td><td><code>/agendar/{tenantId}</code></td><td>Pública</td><td>Cliente final</td><td>Booking direto multi-tenant</td></tr>
+            <tr><td><code>agendamento-whatsapp.html</code></td><td><code>/agendamento-whatsapp.html?t={token}</code></td><td>Pública (magic)</td><td>Cliente WhatsApp</td><td>Booking com identificação pré-preenchida</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="modelo-dados">
+        <button class="copy-btn" onclick="copySection('modelo-dados')">📋 Copiar seção</button>
+        <h2>7. Modelo de Dados</h2>
+        <div class="callout warning"><span class="callout-icon">⚠️</span><div class="callout-content"><span class="callout-title">Nota de Engenharia Reversa</span>Schemas não foram visualizados via SQL direto. As estruturas abaixo são deduzidas dos <code>select</code>/<code>insert</code> observados no código.</div></div>
+        <div class="table-container">
+          <table><thead><tr><th>Tabela</th><th>Função</th><th>Campos confirmados (subset)</th><th>RLS esperada</th></tr></thead><tbody>
+            <tr><td><code>tenants</code></td><td>Cadastro de salões</td><td><code>id</code>, <code>nome</code>, <code>slug</code>, <code>logo_url</code></td><td>Por user_role</td></tr>
+            <tr><td><code>tenant_settings</code></td><td>Feature flags por tenant</td><td><code>tenant_id</code>, <code>permitir_agendamento_cliente</code>, <code>exigir_senha_cancelamento</code>, <code>evolution_settings</code></td><td>Admin do tenant</td></tr>
+            <tr><td><code>usuarios</code></td><td>Espelho de <code>auth.users</code> com login + tenant</td><td><code>id</code>, <code>tenant_id</code>, <code>login</code>, <code>email</code>, <code>nome</code>, <code>ativo</code></td><td>Admin do tenant</td></tr>
+            <tr><td><code>user_roles</code></td><td>RBAC</td><td><code>user_id</code>, <code>tenant_id</code>, <code>role</code></td><td>Própria + admin</td></tr>
+            <tr><td><code>profissionais</code></td><td>Equipe técnica</td><td><code>id</code>, <code>tenant_id</code>, <code>nome</code>, <code>avatar_url</code>, <code>cor</code>, <code>user_id</code>, <code>ativo</code></td><td>Por tenant</td></tr>
+            <tr><td><code>agendamentos</code></td><td>Agendamentos</td><td><code>id</code>, <code>tenant_id</code>, <code>cliente_id</code>, <code>profissional_id</code>, <code>data</code>, <code>hora</code>, <code>status</code>, <code>origem</code>, <code>reminder_*_sent_at</code></td><td>Por tenant</td></tr>
+            <tr><td><code>agendamento_servicos</code></td><td>N:N agendamento ↔ serviço</td><td><code>agendamento_id</code>, <code>servico_id</code>, <code>origem</code></td><td>Por tenant</td></tr>
+            <tr><td><code>agendamento_pagamentos</code></td><td>Baixa de pagamento</td><td><code>agendamento_id</code>, <code>forma</code>, <code>valor</code>, <code>parcelas</code></td><td>Por tenant</td></tr>
+            <tr><td><code>cancelamento_log</code></td><td>Auditoria de cancelamentos</td><td><code>agendamento_id</code>, <code>motivo_id</code>, <code>cancelado_por</code>, <code>cancelar_com_venda</code></td><td>Por tenant</td></tr>
+            <tr><td><code>whatsapp_sessions</code></td><td>Magic link WhatsApp</td><td><code>token</code>, <code>tenant_id</code>, <code>cliente_id</code>, <code>expires_at</code>, <code>consumed_at</code></td><td>RPC pública</td></tr>
+          </tbody></table>
+        </div>
+        <h3>7.3. Diagrama ER (alto nível)</h3>
+        <div class="flow-diagram">tenants ─┬─ &lt; tenant_settings
+         ├─ &lt; tenant_images
+         ├─ &lt; agenda_themes
+         ├─ &lt; usuarios ── &lt; user_roles
+         ├─ &lt; profissionais ── &lt; profissional_servicos &gt;── servicos
+         ├─ &lt; clientes ── &lt; cliente_pacotes &gt;── pacotes
+         ├─ &lt; agendamentos ── &lt; agendamento_servicos &gt;── servicos
+         │                ── &lt; agendamento_pagamentos
+         │                ── &lt; cancelamento_log &gt;── cancelamento_motivos
+         ├─ &lt; produtos
+         ├─ &lt; agenda_bloqueios
+         ├─ &lt; service_recommendations
+         ├─ &lt; whatsapp_sessions
+         ├─ &lt; whatsapp_notifications_log
+         ├─ &lt; inactive_customer_campaigns
+         ├─ &lt; push_subscriptions
+         └─ &lt; evolution_settings</div>
+      </div>
+
+      <div class="section-wrapper" id="permissoes">
+        <button class="copy-btn" onclick="copySection('permissoes')">📋 Copiar seção</button>
+        <h2>8. Permissões, Roles e Multi-Tenancy</h2>
+        <h3>8.1. Roles</h3>
+        <div class="table-container">
+          <table><thead><tr><th>Role</th><th>Escopo</th><th>Capacidades</th></tr></thead><tbody>
+            <tr><td><code>master_admin</code></td><td>Global</td><td>Cria tenants, master_admins, tudo que admin faz em qualquer tenant</td></tr>
+            <tr><td><code>admin</code></td><td>Por tenant</td><td>CRUD completo, usuários (até 3), feature flags, tema, cancelamentos</td></tr>
+            <tr><td><code>colaborador</code></td><td>Por tenant</td><td>Acesso restrito a "Agendamentos" (filtrado) e "Meu Perfil"</td></tr>
+          </tbody></table>
+        </div>
+        <h3>8.2. Resolução de role (<code>resolveUserRoleRows</code>)</h3>
+        <ol>
+          <li>Possui <code>master_admin</code> → <code>master_admin</code></li>
+          <li>Linha com <code>tenant_id == currentTenantId</code> e <code>role == 'admin'</code> → <code>admin</code></li>
+          <li>Linha com <code>tenant_id == currentTenantId</code> e <code>role == 'colaborador'</code> → <code>colaborador</code></li>
+          <li>Fallback global/admin/colaborador → Default final: <code>colaborador</code></li>
+        </ol>
+        <div class="callout info"><span class="callout-icon">🛡️</span><div class="callout-content"><span class="callout-title">Limite & Login</span><code>MAX_USERS_PER_TENANT = 3</code>. Login validado via regex <code>/^[a-zA-Z0-9._]+$/</code>, 3-30 chars, lowercase. Resolvido via <code>resolve-login-to-email</code> (anti-enumeração).</div></div>
+      </div>
+
+      <div class="section-wrapper" id="fluxos-auth">
+        <button class="copy-btn" onclick="copySection('fluxos-auth')">📋 Copiar seção</button>
+        <h2>9. Fluxos de Autenticação</h2>
+        <div class="flow-diagram">
+          <span class="hl">9.1 Fluxo de Login:</span>
+          /index.html → Input (login ou email) + Senha → "Entrar"
+          ├─ Se "@" → trata como email
+          └─ Senão → POST /functions/v1/resolve-login-to-email { login }
+                ↓
+          supabaseClient.auth.signInWithPassword({ email, password })
+          ├─ Sucesso: Lê roles → (Múltiplos tenants? select-tenant.html : agenda.html)
+          └─ Falha: .login-error
+          
+          <span class="hl">9.2 Fluxo de Convite/Recovery:</span>
+          /definir-senha.html aceita 4 formatos de token:
+          1. ?code=... (Magic link novo)
+          2. ?token_hash=... & type=invite|recovery (Clássicos)
+          3. #access_token=... & refresh_token=... (Hash legado)
+          4. ?error=... (Erro Supabase)
+          Política: ≥8 chars, 1 maiúscula, 1 minúscula, 1 número, 1 especial.
+          Sucesso → signOut('global') → Limpa sb-* → index.html?senha_criada=1
+          
+          <span class="hl">9.4/9.5 Criação de Tenant/Usuário:</span>
+          master_admin → POST /create-tenant-with-admin → Valida JWT/role → Cria tenant/auth.user/usuarios/roles → Rollback em erro
+          admin → POST /create-user-for-tenant → Valida → countTenantUsers() (máx 3) → Cria auth.user/usuarios/roles → Rollback em erro
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="jornadas">
+        <button class="copy-btn" onclick="copySection('jornadas')">📋 Copiar seção</button>
+        <h2>10. Jornadas do Usuário</h2>
+        <h3>10.1 Cliente final via link público</h3>
+        <p>URL <code>/agendar/{tenantId}</code> → Valida <code>permitir_agendamento_cliente</code> → Step 1 (Identificação/Tel) → Step 2 (Serviço + Pacotes) → Step 3 (Profissional) → Step 4 (Calendário/Disponibilidade) → Step 5 (Confirmação + Upsell) → INSERT <code>agendamentos</code> → <code>notify-whatsapp</code> + Push → Tela de sucesso.</p>
+        <h3>10.2 Cliente via WhatsApp (magic link)</h3>
+        <p>Webhook → <code>create-whatsapp-session</code> → Resolve cliente → Gera token (30min) → Envia link via Evolution → <code>wa_session_lookup</code> → Pré-preenche → <code>wa_session_mark_used</code> → Reusa motor.</p>
+        <h3>10.3/10.4 Login Interno & Pagamento</h3>
+        <p>Boot → Roles/Theme/Appointments → Novo Agendamento → CRUD → INSERT (origem='interno') → Modal Pagamento (5 formas: PIX, Dinheiro, Débito, Crédito, Parcelado) → Auto-conclusão se integral → INSERT pagamentos → UPDATE status='concluido'.</p>
+      </div>
+
+      <div class="section-wrapper" id="fluxos-sistema">
+        <button class="copy-btn" onclick="copySection('fluxos-sistema')">📋 Copiar seção</button>
+        <h2>11. Fluxos Completos do Sistema</h2>
+        <div class="collapsible-header" onclick="toggleCollapse(this)"><h3>11.1 Lembretes automáticos (notify-reminders v2)</h3><span class="collapsible-arrow">▼</span></div>
+        <div class="collapsible-content"><div class="collapsible-inner">
+          <p><code>pg_cron</code> a cada 5 min → POST <code>/notify-reminders</code>. Janela alvo: agora + 24h ± 6 min E agora + 2h ± 6 min. Inteligência: ≥24h antes → reminder_24h; 2h-24h antes → reminder_2h; <2h → skip. Anti-duplicidade via colunas <code>reminder_*_sent_at</code>. Atualiza DB e loga.</p>
+        </div></div>
+        <div class="collapsible-header" onclick="toggleCollapse(this)"><h3>11.2 Reativação de inativos (notify-inactive-customers v1)</h3><span class="collapsible-arrow">▼</span></div>
+        <div class="collapsible-content"><div class="collapsible-inner">
+          <p><code>pg_cron</code> 1x/dia (10:00 BRT) → Para cada tenant com flag true: Busca clientes último agendamento > 30 dias → Filtra cooldown 30 dias → Limita 200/run → Envia via Evolution (sleep 250ms) → Loga campanhas.</p>
+        </div></div>
+        <div class="collapsible-header" onclick="toggleCollapse(this)"><h3>11.3/11.4/11.5 Push Externo, Importação & PWA</h3><span class="collapsible-arrow">▼</span></div>
+        <div class="collapsible-content"><div class="collapsible-inner">
+          <p><strong>Push Externo:</strong> Trigger DB/Front → Valida origem='externo' → Busca subscriptions → webpush.sendNotification (VAPID) → 410 Gone = DELETE.<br>
+          <strong>Importação:</strong> Admin → Modal → Carrega xlsx (CDN) → Parse → Preview → Normaliza Tel/Nome/Data → Dedupe → INSERT batch → Toast.<br>
+          <strong>PWA Update:</strong> <code>register(sw.js)</code> → <code>updateViaCache: 'none'</code> → Throttle 60s → Toast "Atualizar" → <code>postMessage('SKIP_WAITING')</code> → Reload.</p>
+        </div></div>
+      </div>
+
+      <div class="section-wrapper" id="regras-negocio">
+        <button class="copy-btn" onclick="copySection('regras-negocio')">📋 Copiar seção</button>
+        <h2>12. Regras de Negócio</h2>
+        <div class="table-container">
+          <table><thead><tr><th>Status/Origem</th><th>Significado</th><th>Conta no Faturamento?</th><th>Conta como Prejuízo?</th></tr></thead><tbody>
+            <tr><td><code>pendente</code></td><td>Aguardando confirmação</td><td>Não</td><td>Não</td></tr>
+            <tr><td><code>confirmado</code></td><td>Confirmado, ainda não atendido</td><td>Não</td><td>Não</td></tr>
+            <tr><td><code>concluido</code></td><td>Atendido + pago</td><td>Sim</td><td>Não</td></tr>
+            <tr><td><code>cancelado</code></td><td>Cancelado sem venda</td><td>Não</td><td>Sim</td></tr>
+            <tr><td><code>cancelado_com_venda</code></td><td>Cancelado mas houve venda</td><td>Sim (produtos)</td><td>Não</td></tr>
+          </tbody></table>
+        </div>
+        <p><strong>Origens:</strong> <code>AVULSO</code> (pago), <code>PACOTE_USO</code> (já pago), <code>PACOTE_VENDA</code> (paga no momento). <code>interno</code> vs <code>externo</code> (dispara WhatsApp/Push).</p>
+        <p><strong>Feature Flags:</strong> <code>permitir_agendamento_cliente</code> (default false), <code>exigir_senha_cancelamento</code> (default true/fail-safe), <code>inactive_customer_automation_enabled</code> (default false).</p>
+        <p><strong>Lembretes WhatsApp:</strong> Inteligente (24h ou 2h), Anti-duplicidade, Janela ±6 min. <strong>Reativação:</strong> 30 dias inatividade, 30 dias cooldown, 200 max/run. <strong>Tel:</strong> Normalizado BR. <strong>Usuários:</strong> Máx 3.</p>
+      </div>
+
+      <div class="section-wrapper" id="edge-functions">
+        <button class="copy-btn" onclick="copySection('edge-functions')">📋 Copiar seção</button>
+        <h2>13. Edge Functions (APIs Backend)</h2>
+        <div class="table-container">
+          <table><thead><tr><th>#</th><th>Função</th><th>Auth</th><th>TTL/Cron</th><th>Função</th></tr></thead><tbody>
+            <tr><td>1</td><td><code>resolve-login-to-email</code></td><td>Pública</td><td>—</td><td>Resolve login → email, anti-enumeração</td></tr>
+            <tr><td>2</td><td><code>cancelar-agendamento</code></td><td>JWT</td><td>—</td><td>Cancela com auditoria, idempotente</td></tr>
+            <tr><td>3</td><td><code>create-master-admin</code></td><td>JWT + master</td><td>—</td><td>Cria novo master_admin</td></tr>
+            <tr><td>4</td><td><code>create-tenant-with-admin</code></td><td>JWT + master</td><td>—</td><td>Cria tenant + admin via invite</td></tr>
+            <tr><td>5</td><td><code>create-user-for-tenant</code></td><td>JWT + admin</td><td>—</td><td>Cria usuário com rollback, máx 3</td></tr>
+            <tr><td>6</td><td><code>notify-whatsapp</code></td><td>Service role</td><td>POST INSERT</td><td>Confirmação imediata</td></tr>
+            <tr><td>7</td><td><code>notify-reminders</code> v2</td><td>Service role</td><td>pg_cron 5min</td><td>Lembretes 24h/2h</td></tr>
+            <tr><td>8</td><td><code>notify-inactive-customers</code> v1</td><td>Service role</td><td>pg_cron 1x/dia</td><td>Reativação</td></tr>
+            <tr><td>9</td><td><code>notify-agendamento-externo</code></td><td>Service role</td><td>Trigger</td><td>Web Push (VAPID)</td></tr>
+            <tr><td>10</td><td><code>create-whatsapp-session</code></td><td>Webhook</td><td>—</td><td>Magic link 30min + Evolution</td></tr>
+          </tbody></table>
+        </div>
+        <div class="callout info"><span class="callout-icon">🌐</span><div class="callout-content"><span class="callout-title">CORS & Env</span>Todas: <code>Access-Control-Allow-Origin: *</code>. Env vars: <code>SUPABASE_URL</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>VAPID_KEYS</code>.</div></div>
+      </div>
+
+      <div class="section-wrapper" id="integracoes">
+        <button class="copy-btn" onclick="copySection('integracoes')">📋 Copiar seção</button>
+        <h2>14. Integrações Externas</h2>
+        <div class="table-container">
+          <table><thead><tr><th>Integração</th><th>Provedor</th><th>Uso</th></tr></thead><tbody>
+            <tr><td>WhatsApp</td><td>Evolution API (auto-hospedada)</td><td>Confirmação, lembretes, reativação, magic link</td></tr>
+            <tr><td>Web Push</td><td>Browser Push API</td><td>Notificação push aos profissionais (VAPID)</td></tr>
+            <tr><td>Pickr / SortableJS / xlsx / FontAwesome</td><td>CDNs</td><td>Color picker, D&D, Planilhas, Ícones</td></tr>
+            <tr><td>Google Fonts</td><td>Google</td><td>Inter, Playfair Display, Poppins</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="estados-sistema">
+        <button class="copy-btn" onclick="copySection('estados-sistema')">📋 Copiar seção</button>
+        <h2>15. Estados do Sistema</h2>
+        <p>Compartilhados via <code>window.*</code> e <code>localStorage</code>. Ex: <code>__supabaseClient</code>, <code>currentUser</code>, <code>appointments</code>, <code>servicePrices</code>, <code>activeFilters</code>, <code>__produtosVendaState</code>.</p>
+        <p><strong>Skeleton Loading v7:</strong> MIN=250ms, FAILSAFE=4000ms, FADE=200ms. Detecta listas vazias via regex.</p>
+      </div>
+
+      <div class="section-wrapper" id="componentes">
+        <button class="copy-btn" onclick="copySection('componentes')">📋 Copiar seção</button>
+        <h2>16. Componentes Reutilizáveis</h2>
+        <p>Design system em <code>estilos.css</code> (~50 seções). Sidebar, Login, Calendário, Timeline, Modais CRUD, Avatar/Crop, Toast, Hamburger, Select Tenant, Usuários, Upsell, Identificação, Grid Produtos, Dash Cards.</p>
+        <div class="callout warning"><span class="callout-icon">⚠️</span><div class="callout-content"><span class="callout-title">Débito de Toast</span>4 implementações coexistem: <code>.toast</code>, <code>.bs-toast</code>, <code>.tp-toast</code>, <code>.toast-success</code>. Padronizar.</div></div>
+      </div>
+
+      <div class="section-wrapper" id="hooks">
+        <button class="copy-btn" onclick="copySection('hooks')">📋 Copiar seção</button>
+        <h2>17. Hooks, Contextos e Stores Globais</h2>
+        <p>Não há React/Vue. Convenções: <code>window.loadDashboard</code> (wrap), <code>openModal/closeModal</code>, <code>getCurrentTenantId()</code>, <code>getAppointmentServicos(ag)</code>, <code>triggerWhatsAppNotification(agId)</code>.</p>
+        <p>Sincronização cross-tab via <code>BroadcastChannel</code> (tema) + fallback <code>localStorage</code>.</p>
+      </div>
+
+      <div class="section-wrapper" id="dependencias">
+        <button class="copy-btn" onclick="copySection('dependencias')">📋 Copiar seção</button>
+        <h2>18. Dependências entre Módulos</h2>
+        <div class="flow-diagram">config.js → supabaseClient.js → script.js (núcleo)
+         ├─ pagamentos.js (window.servicePrices, openModal)
+         ├─ dashboard-pagamentos.js (window.loadDashboard)
+         ├─ analytics-*.js (window.loadDashboard)
+         ├─ tabela-precos.js, import-clientes.js, cancelamento-auth.js
+         ├─ notifyWhatsapp.js, skeleton-loading.js, pacote-badge-patch.js
+         └─ (booking) agendamento-cliente.js → agendamento-whatsapp.js</div>
+      </div>
+
+      <div class="section-wrapper" id="fluxos-erro">
+        <button class="copy-btn" onclick="copySection('fluxos-erro')">📋 Copiar seção</button>
+        <h2>19. Fluxos Alternativos e de Erro</h2>
+        <ul>
+          <li><strong>Login:</strong> Anti-enumeração (404 genérico), Edge offline, Body >1024b.</li>
+          <li><strong>Booking:</strong> <code>permitir_agendamento_cliente == false</code> → Indisponível. Conflito → Constraint DB.</li>
+          <li><strong>Magic Link:</strong> Token inválido/expirado/consumido → Bloqueio.</li>
+          <li><strong>Cancelamento:</strong> 401 (sem JWT), 403 (role), 409 (idempotência), 401 (senha errada). Flag DB error → Fail-safe exige senha.</li>
+          <li><strong>Pagamentos:</strong> Restante >0 → Concluir desabilitado. Auto-conclusão → Esconde botão.</li>
+          <li><strong>PWA:</strong> Update no meio de form → Risco perda estado. Cache antigo → network-first resolve ≤3s.</li>
+        </ul>
+      </div>
+
+      <div class="section-wrapper" id="validacoes">
+        <button class="copy-btn" onclick="copySection('validacoes')">📋 Copiar seção</button>
+        <h2>20. Validações e Restrições</h2>
+        <div class="table-container">
+          <table><thead><tr><th>Campo</th><th>Regra</th><th>Local</th></tr></thead><tbody>
+            <tr><td>Login</td><td>Regex, 3-30 chars, lowercase</td><td>Edge functions</td></tr>
+            <tr><td>Email</td><td>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/</td><td>Edge functions</td></tr>
+            <tr><td>Senha</td><td>≥8, 1 Mai, 1 Min, 1 Num, 1 Especial</td><td>definir-senha.html + Auth</td></tr>
+            <tr><td>Telefone</td><td>10 ou 11 dígitos (após strip)</td><td>import/agendamento-cliente</td></tr>
+            <tr><td>Token WhatsApp</td><td>256 bits base64url, TTL 30min, one-shot</td><td>create-whatsapp-session</td></tr>
+            <tr><td>Importação</td><td>≤ 5.000 linhas</td><td>import-clientes.js</td></tr>
+            <tr><td>Usuários/tenant</td><td>≤ 3 ativos</td><td>create-user-for-tenant</td></tr>
+            <tr><td>Reativação</td><td>30 dias inatividade + 30 cooldown + tel ≥10</td><td>notify-inactive-customers</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="eventos">
+        <button class="copy-btn" onclick="copySection('eventos')">📋 Copiar seção</button>
+        <h2>21. Eventos do Sistema</h2>
+        <h3>21.1 Domínio</h3>
+        <p><code>Agendamento criado (externo)</code> → WhatsApp + Push. <code>Concluído</code> → Faturamento. <code>Cancelado</code> → Log + Prejuízo. <code>Pacote vendido</code> → Saldo disponível.</p>
+        <h3>21.2 UI & 21.3 Cron</h3>
+        <p><code>controllerchange</code> → PWA reload. <code>updatefound</code> → Toast. <code>BroadcastChannel</code> → Tema sync. <code>MutationObserver</code> → Badges patch. <code>pg_cron</code> 5min → Reminders. <code>pg_cron</code> 1x/dia → Inativos.</p>
+      </div>
+
+      <div class="section-wrapper" id="pwa">
+        <button class="copy-btn" onclick="copySection('pwa')">📋 Copiar seção</button>
+        <h2>22. PWA e Service Workers</h2>
+        <div class="callout warning"><span class="callout-icon">⚠️</span><div class="callout-content"><span class="callout-title">Manifest Legado</span>Nome interno: <code>"Beauty System"</code>. Marca pública: <code>Slotify</code>. Cor tema: <code>#652AF4</code>.</div></div>
+        <p><code>sw.js</code> v1.0.0 (Atual): Network-first HTML/JS/CSS, passthrough outros, <code>skipWaiting()</code> manual. <code>service-worker.js</code> v3-bcast: 🔴 LEGADO (não ativo).</p>
+        <p><strong>Update Flow:</strong> <code>register</code> → Throttle 60s → Toast se <code>state='installed'</code> & controller existe → <code>postMessage('SKIP_WAITING')</code> → Reload.</p>
+      </div>
+
+      <div class="section-wrapper" id="theming">
+        <button class="copy-btn" onclick="copySection('theming')">📋 Copiar seção</button>
+        <h2>23. Sistema de Tema (Theming)</h2>
+        <p>Tokens CSS: <code>--gold</code> (cor primária), <code>--sidebar-bg</code>, <code>--bg-card</code>, <code>--text</code>, <code>--border</code>, etc. Editor em <code>tema-agenda.html</code> (dark UI, isolado). Gera variações HSL. Persiste em <code>agenda_themes</code>. Sync via <code>BroadcastChannel</code>.</p>
+        <p><strong>Skeleton v7:</strong> 100% via tokens + <code>color-mix()</code>. Zero cores hardcoded.</p>
+      </div>
+
+      <div class="section-wrapper" id="criticos">
+        <button class="copy-btn" onclick="copySection('criticos')">📋 Copiar seção</button>
+        <h2>24. Cenários Críticos e Pontos de Atenção</h2>
+        <div class="table-container">
+          <table><thead><tr><th>Cenário</th><th>Risco</th><th>Status</th></tr></thead><tbody>
+            <tr><td><code>config.js</code> com ANON_KEY</td><td>Baixo (publishable)</td><td>✓ Aceitável</td></tr>
+            <tr><td><code>cancelamento-auth.js</code> bypass</td><td>Médio</td><td>Default fail-safe exige senha</td></tr>
+            <tr><td>Edge <code>resolve-login-to-email</code> <code>--no-verify-jwt</code></td><td>Alto se não genérico</td><td>✓ Mitigado anti-enumeração</td></tr>
+            <tr><td><code>service-worker.js</code> legado no projeto</td><td>Médio (conflito)</td><td><span class="badge critical">🔴 Limpar</span></td></tr>
+            <tr><td>Race: SW update no meio de form</td><td>Perda de estado</td><td>Sem confirmação nativa</td></tr>
+            <tr><td>Drift CSS (<code>estilos.css</code> vs <code>estilos_com_pacotes.css</code>)</td><td>Visual</td><td>Unificar</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="debitos">
+        <button class="copy-btn" onclick="copySection('debitos')">📋 Copiar seção</button>
+        <h2>25. Débitos Técnicos Identificados</h2>
+        <div class="table-container">
+          <table><thead><tr><th>#</th><th>Débito</th><th>Severidade</th><th>Recomendação</th></tr></thead><tbody>
+            <tr><td>1</td><td>Versões paralelas legadas (<code>script_com_pacotes.js</code>, etc.)</td><td><span class="badge critical">🔴 Alta</span></td><td>Remover após confirmação</td></tr>
+            <tr><td>11</td><td><code>script.js</code> com 12.7k linhas (Monólito)</td><td><span class="badge critical">🔴 Alta</span></td><td>Modularizar (longo prazo)</td></tr>
+            <tr><td>3/4/7</td><td>Patch runtime, Skeleton legado, 3 Toasts</td><td><span class="badge warning">🟡 Média</span></td><td>Refatorar/Unificar</td></tr>
+            <tr><td>5/6</td><td>Marca inconsistente / Path legado</td><td><span class="badge warning">🟡 Média</span></td><td>Renomear (atenção PWA pin)</td></tr>
+            <tr><td>8/10</td><td>Estado em <code>window.*</code> / CDN sem SRI</td><td><span class="badge warning">🟡 Média</span></td><td>Módulo ES / <code>integrity=</code></td></tr>
+            <tr><td>12</td><td>Cron hardcoded (-3h sem DST)</td><td><span class="badge warning">🟡 Média</span></td><td>Usar <code>Intl</code> ou TZ por tenant</td></tr>
+            <tr><td>9</td><td>Validações duplicadas</td><td><span class="badge failsafe">🟢 Baixa</span></td><td>Defesa em profundidade (OK)</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="melhorias">
+        <button class="copy-btn" onclick="copySection('melhorias')">📋 Copiar seção</button>
+        <h2>26. Oportunidades de Melhoria</h2>
+        <ul>
+          <li><strong>Observabilidade:</strong> Centralizar logs (estender padrão <code>whatsapp_notifications_log</code>).</li>
+          <li><strong>Idempotência:</strong> Reforçar em INSERTs de booking (<code>request_id</code>).</li>
+          <li><strong>Testes:</strong> Expandir cobertura E2E (Playwright já configurado).</li>
+          <li><strong>i18n & Acessibilidade:</strong> Preparar para expansão. Auditoria WCAG (contraste, ARIA, teclado).</li>
+          <li><strong>Performance:</strong> Lazy-load add-ons, bundling Vite opcional.</li>
+          <li><strong>Schema & Segurança:</strong> Documentar SQL+RLS. Validar assinatura webhook Evolution. Rate limit em edges públicas.</li>
+        </ul>
+      </div>
+
+      <div class="section-wrapper" id="ambiguidades">
+        <button class="copy-btn" onclick="copySection('ambiguidades')">📋 Copiar seção</button>
+        <h2>27. Ambiguidades e Hipóteses <span class="badge legacy">⚠️ Não Confirmado</span></h2>
+        <div class="table-container">
+          <table><thead><tr><th>#</th><th>Item</th><th>Hipótese assumida</th></tr></thead><tbody>
+            <tr><td>1</td><td>Rota pública do booking direto</td><td><code>/agendar/{tenantId}</code> (deduzido)</td></tr>
+            <tr><td>2</td><td>Trigger de <code>notify-agendamento-externo</code></td><td>Trigger DB ou chamada direta do front</td></tr>
+            <tr><td>3</td><td>Webhook <code>create-whatsapp-session</code></td><td>Evolution API (auth não inspecionada)</td></tr>
+            <tr><td>4</td><td>RLS exato de cada tabela</td><td>Por tenant via JWT claim</td></tr>
+            <tr><td>5/6/7</td><td>Acesso colab, Cálculo comissões, Trigger pacote</td><td>Presumido bloqueado/lógica interna/trigger DB</td></tr>
+            <tr><td>8/9/10</td><td>Default flags, Heurística badges, Pasta <code>tests/</code></td><td><code>false</code>, Pode falhar com homônimos, Playwright config aponta</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="glossario">
+        <button class="copy-btn" onclick="copySection('glossario')">📋 Copiar seção</button>
+        <h2>28. Glossário Técnico</h2>
+        <div class="table-container">
+          <table><thead><tr><th>Termo</th><th>Definição</th></tr></thead><tbody>
+            <tr><td><strong>Tenant</strong></td><td>Salão/estabelecimento (cliente B2B)</td></tr>
+            <tr><td><strong>Booking</strong></td><td>Processo de agendamento iniciado pelo cliente</td></tr>
+            <tr><td><strong>Magic link</strong></td><td>URL com token criptográfico que identifica sem senha</td></tr>
+            <tr><td><strong>Agendamento externo</strong></td><td>Origem <code>externo</code> (dispara automações)</td></tr>
+            <tr><td><strong>PACOTE_VENDA / USUARIO</strong></td><td>Compra vs Consumo de saldo</td></tr>
+            <tr><td><strong>CMV</strong></td><td>Custo de Mercadoria Vendida</td></tr>
+            <tr><td><strong>Fail-safe</strong></td><td>Default seguro em caso de erro (ex: exigir senha)</td></tr>
+            <tr><td><strong>VAPID / SWR</strong></td><td>Web Push Keys / Stale-While-Revalidate</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="section-wrapper" id="estrutura-org">
+        <button class="copy-btn" onclick="copySection('estrutura-org')">📋 Copiar seção</button>
+        <h2>29. Estrutura Organizacional do Produto</h2>
+        <div class="flow-diagram">┌─────────────────────────────────────────────────────────┐
+│ CAMADA DE GOVERNANÇA (Master Admin)                   │
+└─────────────────────────────────────────────────────────┘
+                          │
+┌─────────────────────────────────────────────────────────┐
+│ CAMADA DE TENANT (Admin: config, equipe, catálogo, $$) │
+└─────────────────────────────────────────────────────────┘
+                          │
+┌─────────────────────────────────────────────────────────┐
+│ CAMADA OPERACIONAL (Colaborador: agenda, atendimento)  │
+└─────────────────────────────────────────────────────────┘
+                          │
+┌─────────────────────────────────────────────────────────┐
+│ CAMADA CLIENTE (Booking público / WhatsApp magic link) │
+└─────────────────────────────────────────────────────────┘</div>
+        <h3>29.2 Domínios & 29.3 Personas</h3>
+        <p><strong>Domínios:</strong> Identidade, Operação Diária, Catálogo, CRM, Financeiro, Comunicação, Configuração, Auditoria, Plataforma.</p>
+        <p><strong>Personas:</strong> Master Admin (onboarding), Admin Salão (config total), Colaborador (própria agenda), Cliente Link/WhatsApp (autoatendimento).</p>
+      </div>
+
+      <div class="section-wrapper" id="anexos">
+        <button class="copy-btn" onclick="copySection('anexos')">📋 Copiar seção</button>
+        <h2>Anexos</h2>
+        <h3>A.1. Versões e datas</h3>
+        <div class="table-container">
+          <table><thead><tr><th>Componente</th><th>Versão</th><th>Data</th></tr></thead><tbody>
+            <tr><td><code>script.js</code></td><td>v15-config-colaborador-meu-perfil</td><td>2026-05-13</td></tr>
+            <tr><td><code>cancelar-agendamento</code></td><td>v4 (optional-admin)</td><td>2026-05-12</td></tr>
+            <tr><td><code>pagamentos.js</code></td><td>v2</td><td>2026-05-08</td></tr>
+            <tr><td><code>pacote-badge-patch.js</code></td><td>v2</td><td>2026-05-07</td></tr>
+            <tr><td><code>import-clientes.js</code></td><td>v4 (mobile-reload)</td><td>2026-05-09</td></tr>
+            <tr><td><code>skeleton-loading.js</code></td><td>v7 (theme-aware)</td><td>—</td></tr>
+            <tr><td><code>sw.js</code></td><td>v1.0.0</td><td>—</td></tr>
+          </tbody></table>
+        </div>
+        <h3>A.2. Ícones de status visual neste documento</h3>
+        <p>✓ Confirmado | 🔴 Débito Alta | 🟡 Atenção | 🟢 Baixa | ⚠️ Hipótese</p>
+        <div class="callout info"><span class="callout-icon">📝</span><div class="callout-content">Fim da documentação. Para feedback, correções ou expansões específicas, abrir issue no repositório <code>alesionb93/beauty-system</code>.</div></div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="doc-footer">
+    <p>© 2026 Slotify Engineering • Documentação Técnica Oficial v1.0 • Engenharia Reversa Consolidada</p>
+  </footer>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Collapsible Sections
+    function toggleCollapse(header) {
+      const content = header.nextElementSibling;
+      const arrow = header.querySelector('.collapsible-arrow');
+      content.classList.toggle('open');
+      arrow.style.transform = content.classList.contains('open') ? 'rotate(0deg)' : 'rotate(-90deg)';
+    }
+
+    // Copy Section
+    async function copySection(id) {
+      const el = document.getElementById(id);
+      const text = el.innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = el.querySelector('.copy-btn');
+        const original = btn.innerHTML;
+        btn.innerHTML = '✅ Copiado!';
+        setTimeout(() => btn.innerHTML = original, 1500);
+      } catch (err) { console.error('Falha ao copiar', err); }
+    }
+
+    // Sidebar Filter
+    function filterSidebar(query) {
+      const links = document.querySelectorAll('#toc-nav a');
+      query = query.toLowerCase();
+      links.forEach(link => {
+        const match = link.innerText.toLowerCase().includes(query) || link.getAttribute('href').includes(query);
+        link.parentElement.style.display = match ? '' : 'none';
+      });
+    }
+
+    // Mobile Sidebar
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function setLogoutVisible(visible) {
+      const btn = document.getElementById('logoutBtn');
+      if (btn) {
+        btn.classList.toggle('visible', visible);
+      }
+    }
+
+    function showAuthOverlay(show) {
+      const overlay = document.getElementById('authOverlay');
+      if (!overlay) return;
+      overlay.style.display = show ? 'flex' : 'none';
+      document.body.style.overflow = show ? 'hidden' : 'auto';
+      setLogoutVisible(!show);
+      if (show) {
+        document.getElementById('authError').style.display = 'none';
+        document.getElementById('authForm').reset();
+        document.getElementById('authUser').focus();
+      }
+    }
+
+    function isAuthenticated() {
+      return localStorage.getItem('slotifyDocsAuth') === 'true';
+    }
+
+    function login(event) {
+      event.preventDefault();
+      const user = document.getElementById('authUser').value.trim();
+      const pass = document.getElementById('authPass').value;
+      const isValid = user === 'slotify' && pass === 'Slotify.22';
+      const error = document.getElementById('authError');
+      if (isValid) {
+        localStorage.setItem('slotifyDocsAuth', 'true');
+        showAuthOverlay(false);
+      } else {
+        if (error) {
+          error.style.display = 'block';
+        }
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('slotifyDocsAuth');
+      showAuthOverlay(true);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('authForm');
+      if (form) {
+        form.addEventListener('submit', login);
+      }
+      showAuthOverlay(!isAuthenticated());
+    });
+
+    // Scrollspy & Active Link
+    const sections = document.querySelectorAll('.section-wrapper');
+    const navLinks = document.querySelectorAll('#toc-nav a');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.remove('active'));
+          const activeId = entry.target.id;
+          const activeLink = document.querySelector(`#toc-nav a[href="#${activeId}"]`);
+          if (activeLink) activeLink.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+    sections.forEach(section => observer.observe(section));
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 950) document.getElementById('sidebar').classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>
